@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog de Biología II - 2025</title>
+    <style>
+        /* Estilos generales */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f7f4;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Encabezado */
+        header {
+            background: linear-gradient(135deg, #2e7d32, #4caf50);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        /* Navegación */
+        nav {
+            background-color: #1b5e20;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+        }
+        
+        nav li {
+            margin: 0 15px;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Contenido principal */
+        main {
+            padding: 40px 0;
+        }
+        
+        .post {
+            background-color: white;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            border-left: 5px solid #4caf50;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .post:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+        
+        .post h2 {
+            color: #2e7d32;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .post h2::after {
+            content: "−";
+            font-size: 1.5rem;
+        }
+        
+        .post.collapsed h2::after {
+            content: "+";
+        }
+        
+        .post-content {
+            max-height: 1000px;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+        
+        .post.collapsed .post-content {
+            max-height: 0;
+        }
+        
+        .post h3 {
+            color: #388e3c;
+            margin: 25px 0 15px;
+        }
+        
+        .post p {
+            margin-bottom: 15px;
+        }
+        
+        .media-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .media-item {
+            flex: 1 1 300px;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+            transition: transform 0.3s;
+        }
+        
+        .media-item:hover {
+            transform: scale(1.02);
+        }
+        
+        .media-item img, .media-item iframe {
+            max-width: 75%;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        
+        .task-list {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .task-list li {
+            margin-bottom: 10px;
+        }
+        
+        /* Botones interactivos */
+        .btn {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+            margin: 5px;
+        }
+        
+        .btn:hover {
+            background-color: #388e3c;
+        }
+        
+        .btn-secondary {
+            background-color: #2196f3;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #1976d2;
+        }
+        
+        /* Contador de visitas */
+        .visitor-counter {
+            background-color: #e8f5e9;
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+            display: inline-block;
+            font-weight: bold;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #777;
+        }
+        
+        .close-modal:hover {
+            color: #333;
+        }
+        
+        /* Estilos específicos para el quiz */
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .quiz-option {
+            text-align: left;
+            padding: 12px 15px;
+        }
+        
+        .quiz-feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 6px;
+            display: none;
+        }
+        
+        .correct {
+            background-color: #e8f5e9;
+            border-left: 4px solid #4caf50;
+        }
+        
+        .incorrect {
+            background-color: #ffebee;
+            border-left: 4px solid #f44336;
+        }
+        
+        .quiz-explanation {
+            margin-top: 10px;
+            font-style: italic;
+        }
+        
+        .quiz-progress {
+            margin: 15px 0;
+            font-weight: bold;
+        }
+        
+        /* Formulario de comentarios */
+        .comment-form {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 6px;
+        }
+        
+        .comment-form textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .comments-section {
+            margin-top: 20px;
+        }
+        
+        .comment {
+            background-color: #f5f5f5;
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            border-left: 3px solid #4caf50;
+        }
+        
+        .comment-date {
+            font-size: 0.8rem;
+            color: #777;
+            margin-top: 5px;
+        }
+        
+        /* Barra de progreso */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background-color: #e0e0e0;
+            z-index: 1001;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background-color: #4caf50;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        /* Pie de página */
+        footer {
+            background-color: #1b5e20;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            nav li {
+                margin: 5px 0;
+            }
+            
+            .media-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Barra de progreso -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+    
+    <!-- Encabezado -->
+    <header>
+        <div class="container">
+            <h1>Blog de Biología II</h1>
+            <p>Profesorado de Enseñanza Media en Matemática y Física - USAC - CUSACQ</p>
+            <p>Año 2025</p>
+            <div class="visitor-counter" id="visitorCounter">Visitas: Cargando...</div>
+        </div>
+    </header>
+    
+    <!-- Navegación -->
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="#post1">Post 1: Bienvenida</a></li>
+                <li><a href="#post2">Post 2: Tareas Parcial 1</a></li>
+                <li><a href="#post3">Post 3: Tareas Parcial 2</a></li>
+                <li><a href="#" id="toggleDarkMode">Modo Oscuro</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- Contenido principal -->
+    <main class="container">
+        <!-- Post 1: Bienvenida -->
+        <section id="post1" class="post">
+            <h2>Post 1: Bienvenida al Blog de Biología</h2>
+            <div class="post-content">
+                <p>¡Bienvenidos a mi blog personal de Biología II! En este espacio compartiré mis aprendizajes, tareas y proyectos relacionados con el curso. A continuación, encontrarás recursos multimedia que enriquecerán nuestro estudio de la biología.</p>
+                
+                <div class="media-container">
+                    <div class="media-item">
+                        <img src="diversidad.png" alt="Representación de la diversidad biológica">
+                        <p><strong>Descripción:</strong> Esta imagen representa la increíble diversidad de la vida en nuestro planeta, desde microorganismos hasta ecosistemas complejos.</p>
+                    </div>
+                    
+                    <div class="media-item">
+                        <iframe width="100%" height="200" src="https://www.youtube.com/watch?v=KbLw6cB52vQ" title="Video de Biología" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <p><strong>Descripción:</strong> Este video educativo explora los fundamentos de la biología celular y los procesos vitales que caracterizan a los seres vivos.</p>
+                    </div>
+                    
+                    <div class="media-item">
+                        <h3>Enlace Recomendado</h3>
+                        <p><strong><a href="openstax.org" target="_blank">OpenStax - Biología</a></strong></p>
+                        <p><strong>Descripción:</strong>OpenStax es una fuente fiable y gratuita para obtener libros de texto universitarios y de secundaria completos y de buena calidad, lo que la convierte en un recurso excelente para estudiar Biología u otras asignaturas..</p>
+                    </div>
+                </div>
+                
+                <button class="btn" id="showModalBtn">Ver información importante</button>
+                <button class="btn btn-secondary" id="toggleCommentsBtn1">Mostrar/Ocultar Comentarios</button>
+                
+                <div class="comment-form" id="commentForm1">
+                    <h4>Agregar comentario:</h4>
+                    <textarea placeholder="Escribe tu comentario aquí..." id="commentInput1"></textarea>
+                    <button class="btn" id="submitComment1">Enviar comentario</button>
+                </div>
+                
+                <div class="comments-section" id="commentsSection1">
+                    <!-- Los comentarios se agregarán aquí mediante JavaScript -->
+                </div>
+            </div>
+        </section>
+        
+        <!-- Post 2: Tareas Parcial 1 -->
+        <section id="post2" class="post">
+            <h2>Post 2: Tareas del Parcial 1</h2>
+            <div class="post-content">
+                <p>En este post presento tres de las tareas realizadas para el primer parcial del curso, centradas en el tema de la reproducción.</p>
+                
+                <h3>Tareas Publicadas:</h3>
+                <ol class="task-list">
+                    <li>
+                        <strong>Diapositivas sobre Reproducción:</strong> 
+                        <p>Presentación que desarrollé para la exposición en clase, abordando los diferentes mecanismos de reproducción en seres vivos.</p>
+                        <p><em>Importancia:</em> Esta presentación sintetiza conceptos clave sobre reproducción asexual y sexual, facilitando la comprensión de estos procesos fundamentales.</p>
+                        <a href="MEIOSIS.pdf">Diapositivas</a>
+                    </li>
+                    
+                    <li>
+                        <strong>Crucigrama de 15 ítems:</strong>
+                        <p>Actividad lúdica que refuerza el vocabulario y conceptos relacionados con la reproducción biológica.</p>
+                        <p><em>Importancia:</em> Los crucigramas son herramientas educativas efectivas que permiten aprender terminología científica de manera entretenida y memorable.</p>
+                        <a href="crusigrama.html">Crusigrama</a>
+                    </li>
+                    
+                    <li>
+                        <strong>Canción sobre Biología:</strong>
+                        <p>Composición original que explica procesos biológicos a través de la música.</p>
+                        <p><em>Importancia:</em> La musicalización de conceptos científicos facilita la retención de información y hace el aprendizaje más ameno y creativo.</p>
+                    </li>
+                </ol>
+                
+                <div class="media-container">
+                    <div class="media-item">
+                        <img src="expo.png" alt="Captura de diapositivas sobre reproducción">
+                        <p>Imagen representativa de las diapositivas sobre reproducción que preparé para la clase.</p>
+                    </div>
+                    
+                    <div class="media-item">
+                        <img src="crusi.png" alt="Ejemplo de crucigrama biológico">
+                        <p>Ejemplo del crucigrama con términos relacionados con la reproducción biológica.</p>
+                    </div>
+                </div>
+                
+                <button class="btn btn-secondary" id="toggleCommentsBtn2">Mostrar/Ocultar Comentarios</button>
+                
+                <div class="comment-form" id="commentForm2" style="display: none;">
+                    <h4>Agregar comentario:</h4>
+                    <textarea placeholder="Escribe tu comentario aquí..." id="commentInput2"></textarea>
+                    <button class="btn" id="submitComment2">Enviar comentario</button>
+                </div>
+                
+                <div class="comments-section" id="commentsSection2" style="display: none;">
+                    <!-- Los comentarios se agregarán aquí mediante JavaScript -->
+                </div>
+            </div>
+        </section>
+        
+        <!-- Post 3: Tareas Parcial 2 -->
+        <section id="post3" class="post">
+            <h2>Post 3: Tareas del Parcial 2</h2>
+            <div class="post-content">
+                <p>En esta entrada del blog comparto dos de las tareas desarrolladas para el segundo parcial, enfocadas en taxones o grupos de seres vivos.</p>
+                
+                <h3>Tareas Publicadas:</h3>
+                <ol class="task-list">
+                    <li>
+                        <strong>Diapositivas sobre Taxones:</strong>
+                        <p>Presentación que elaboré sobre diferentes grupos taxonómicos de seres vivos y sus características distintivas.</p>
+                        <p><em>Importancia:</em> Comprender la clasificación taxonómica es fundamental para organizar el conocimiento sobre la diversidad biológica y las relaciones evolutivas.</p>
+                        <a href="gimno.pdf">Diapositivas</a>
+                
+                    </li>
+                    
+                    <li>
+                        <strong>Video de Procesos Reproductivos:</strong>
+                        <p>Grabación que documenta procesos de reproducción en un ambiente natural.</p>
+                        <p><em>Importancia:</em> Observar estos procesos en su hábitat natural permite comprender mejor las adaptaciones y estrategias reproductivas de diferentes especies.</p>
+                        <a href="https://youtube.com/shorts/CjFvm5oosdY?si=QPUXG3yed1RUOihW">Ver video</a>
+                    </li>
+                </ol>
+                
+                <div class="media-container">
+                    <div class="media-item">
+                        <img src="taxo.png" alt="Clasificación taxonómica">
+                        <p>Representación visual de la clasificación taxonómica de los seres vivos.</p>
+                    </div>
+                    
+                    <div class="media-item">
+                        <img src="procesos.jpg" alt="Procesos reproductivos en la naturaleza">
+                        <p>Fotografía que ilustra procesos reproductivos observados en ambientes naturales.</p>
+                    </div>
+                </div>
+                
+                <button class="btn" id="showQuizBtn">Realizar Quiz sobre Meiosis</button>
+                <button class="btn btn-secondary" id="toggleCommentsBtn3">Mostrar/Ocultar Comentarios</button>
+                
+                <div class="comment-form" id="commentForm3" style="display: none;">
+                    <h4>Agregar comentario:</h4>
+                    <textarea placeholder="Escribe tu comentario aquí..." id="commentInput3"></textarea>
+                    <button class="btn" id="submitComment3">Enviar comentario</button>
+                </div>
+                
+                <div class="comments-section" id="commentsSection3" style="display: none;">
+                    <!-- Los comentarios se agregarán aquí mediante JavaScript -->
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Modal -->
+    <div class="modal" id="infoModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeModal">&times;</span>
+            <h2>Información Importante</h2>
+            <p>
+
+Bienvenidos a mi blog de biología, un espacio dedicado al aprendizaje y la divulgación de los conceptos fundamentales de esta ciencia. Aquí encontrarás explicaciones claras y detalladas sobre diversos temas, desde la estructura celular hasta la evolución y la diversidad de la vida. El contenido está diseñado para apoyar tanto a estudiantes como a entusiastas de la biología, ofreciendo recursos como guías de laboratorio, materiales audiovisuales y actividades interactivas. Además, se promueve un enfoque integral que combina el estudio académico con el bienestar personal y la espiritualidad, reconociendo que el aprendizaje de la biología puede ser exigente pero también profundamente enriquecedor. Si deseas profundizar en algún tema específico, no dudes en explorar las secciones del blog.
+.</p>
+            <p><strong>NOTA FINAL:</strong>Gracais por visitar espero que que te la hayas pasado muy bien</p>
+        </div>
+    </div>
+    
+    <!-- Pie de página -->
+    <footer>
+        <div class="container">
+            <p>Blog de Biología II - Profesorado de Enseñanza Media en Matemática y Física</p>
+            <p>USAC - CUSACQ - Año 2025</p>
+            <p>gracias por visitar mi blog</p>
+        </div>
+    </footer>
+
+    <script>
+        // Funcionalidades JavaScript
+        
+        // Contador de visitas
+        function updateVisitorCounter() {
+            let count = localStorage.getItem('visitorCount') || 0;
+            count = parseInt(count) + 1;
+            localStorage.setItem('visitorCount', count);
+            document.getElementById('visitorCounter').textContent = `Visitas: ${count}`;
+        }
+        
+        // Barra de progreso de desplazamiento
+        function updateProgressBar() {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById("progressBar").style.width = scrolled + "%";
+        }
+        
+        // Modo oscuro
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDarkMode);
+            
+            if (isDarkMode) {
+                document.body.style.backgroundColor = '#1a1a1a';
+                document.body.style.color = '#f0f0f0';
+                document.querySelectorAll('.post').forEach(post => {
+                    post.style.backgroundColor = '#2d2d2d';
+                    post.style.color = '#f0f0f0';
+                });
+            } else {
+                document.body.style.backgroundColor = '#f0f7f4';
+                document.body.style.color = '#333';
+                document.querySelectorAll('.post').forEach(post => {
+                    post.style.backgroundColor = 'white';
+                    post.style.color = '#333';
+                });
+            }
+        }
+        
+        // Colapsar/expandir posts
+        function setupPostToggles() {
+            document.querySelectorAll('.post h2').forEach(heading => {
+                heading.addEventListener('click', function() {
+                    this.parentElement.classList.toggle('collapsed');
+                });
+            });
+        }
+        
+        // Modal
+        function setupModal() {
+            const modal = document.getElementById('infoModal');
+            const btn = document.getElementById('showModalBtn');
+            const span = document.getElementById('closeModal');
+            
+            btn.addEventListener('click', function() {
+                modal.style.display = 'flex';
+            });
+            
+            span.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+            
+            window.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+        
+        // Sistema de comentarios
+        function setupComments() {
+            // Configurar botones para mostrar/ocultar comentarios
+            document.querySelectorAll('[id^="toggleCommentsBtn"]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const postNum = this.id.replace('toggleCommentsBtn', '');
+                    const commentForm = document.getElementById(`commentForm${postNum}`);
+                    const commentsSection = document.getElementById(`commentsSection${postNum}`);
+                    
+                    if (commentForm.style.display === 'none') {
+                        commentForm.style.display = 'block';
+                        commentsSection.style.display = 'block';
+                        loadComments(postNum);
+                    } else {
+                        commentForm.style.display = 'none';
+                        commentsSection.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Configurar envío de comentarios
+            document.querySelectorAll('[id^="submitComment"]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const postNum = this.id.replace('submitComment', '');
+                    const commentInput = document.getElementById(`commentInput${postNum}`);
+                    const commentText = commentInput.value.trim();
+                    
+                    if (commentText) {
+                        saveComment(postNum, commentText);
+                        commentInput.value = '';
+                        loadComments(postNum);
+                    } else {
+                        alert('Por favor, escribe un comentario antes de enviar.');
+                    }
+                });
+            });
+        }
+        
+        function saveComment(postNum, commentText) {
+            const comments = JSON.parse(localStorage.getItem(`comments${postNum}`) || '[]');
+            comments.push({
+                text: commentText,
+                date: new Date().toLocaleString('es-ES')
+            });
+            localStorage.setItem(`comments${postNum}`, JSON.stringify(comments));
+        }
+        
+        function loadComments(postNum) {
+            const commentsSection = document.getElementById(`commentsSection${postNum}`);
+            const comments = JSON.parse(localStorage.getItem(`comments${postNum}`) || '[]');
+            
+            commentsSection.innerHTML = '<h4>Comentarios:</h4>';
+            
+            if (comments.length === 0) {
+                commentsSection.innerHTML += '<p>No hay comentarios aún. ¡Sé el primero en comentar!</p>';
+            } else {
+                comments.forEach(comment => {
+                    const commentElement = document.createElement('div');
+                    commentElement.className = 'comment';
+                    commentElement.innerHTML = `
+                        <p>${comment.text}</p>
+                        <div class="comment-date">${comment.date}</div>
+                    `;
+                    commentsSection.appendChild(commentElement);
+                });
+            }
+        }
+        
+        // Quiz interactivo sobre MEIOSIS
+        function setupQuiz() {
+            document.getElementById('showQuizBtn').addEventListener('click', function() {
+                const questions = [
+                    {
+                        question: "¿Qué es la meiosis?",
+                        options: [
+                            "Un proceso de división celular que produce células hijas genéticamente idénticas",
+                            "Un proceso de división celular que reduce a la mitad el número de cromosomas",
+                            "Un proceso de síntesis de proteínas",
+                            "Un proceso de respiración celular"
+                        ],
+                        answer: 1,
+                        explanation: "La meiosis es un tipo de división celular que reduce el número de cromosomas a la mitad, produciendo gametos (óvulos y espermatozoides) con un solo juego de cromosomas."
+                    },
+                    {
+                        question: "¿Cuántas divisiones sucesivas ocurren en la meiosis?",
+                        options: [
+                            "Una división",
+                            "Dos divisiones",
+                            "Tres divisiones",
+                            "Cuatro divisiones"
+                        ],
+                        answer: 1,
+                        explanation: "La meiosis consta de dos divisiones sucesivas: meiosis I y meiosis II. Esto resulta en cuatro células hijas haploides a partir de una célula madre diploide."
+                    },
+                    {
+                        question: "¿En qué fase de la meiosis ocurre el entrecruzamiento (crossing over)?",
+                        options: [
+                            "Profase I",
+                            "Metafase I",
+                            "Anafase I",
+                            "Telofase I"
+                        ],
+                        answer: 0,
+                        explanation: "El entrecruzamiento o crossing over ocurre durante la profase I de la meiosis, cuando los cromosomas homólogos se aparean e intercambian segmentos de ADN."
+                    },
+                    {
+                        question: "¿Cuál es el resultado final de la meiosis en términos de número de cromosomas?",
+                        options: [
+                            "Células con el mismo número de cromosomas que la célula original",
+                            "Células con el doble de cromosomas que la célula original",
+                            "Células con la mitad de cromosomas que la célula original",
+                            "Células con un cuarto de cromosomas que la célula original"
+                        ],
+                        answer: 2,
+                        explanation: "El resultado final de la meiosis son cuatro células haploides (n), cada una con la mitad del número de cromosomas de la célula madre diploide (2n)."
+                    },
+                    {
+                        question: "¿Qué proceso meiótico contribuye a la variabilidad genética?",
+                        options: [
+                            "Solo la recombinación genética",
+                            "Solo la distribución independiente de cromosomas",
+                            "Tanto la recombinación genética como la distribución independiente",
+                            "Ninguno de los anteriores"
+                        ],
+                        answer: 2,
+                        explanation: "Tanto el crossing over (recombinación genética) en la profase I como la distribución independiente de cromosomas homólogos en la anafase I contribuyen a la variabilidad genética."
+                    },
+                    {
+                        question: "¿En qué tipo de células ocurre la meiosis?",
+                        options: [
+                            "En todas las células del cuerpo",
+                            "Solo en células somáticas",
+                            "Solo en células germinales",
+                            "Solo en células procariotas"
+                        ],
+                        answer: 2,
+                        explanation: "La meiosis ocurre exclusivamente en las células germinales (espermatogonias y ovogonias) para producir gametos (espermatozoides y óvulos)."
+                    }
+                ];
+                
+                let score = 0;
+                let currentQuestion = 0;
+                
+                function showQuestion() {
+                    if (currentQuestion >= questions.length) {
+                        showResults();
+                        return;
+                    }
+                    
+                    const q = questions[currentQuestion];
+                    let quizHTML = `
+                        <div class="modal-content">
+                            <span class="close-modal" id="closeQuiz">&times;</span>
+                            <h2>Quiz sobre Meiosis</h2>
+                            <div class="quiz-progress">Pregunta ${currentQuestion + 1} de ${questions.length}</div>
+                            <p><strong>${q.question}</strong></p>
+                            <div class="quiz-options">
+                    `;
+                    
+                    q.options.forEach((option, index) => {
+                        quizHTML += `
+                            <button class="btn quiz-option" data-answer="${index}">${option}</button>
+                        `;
+                    });
+                    
+                    // Área para feedback
+                    quizHTML += `
+                            </div>
+                            <div class="quiz-feedback" id="quizFeedback">
+                                <div id="feedbackContent"></div>
+                                <button class="btn" id="nextQuestion" style="display: none;">Siguiente Pregunta</button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    const modal = document.getElementById('infoModal');
+                    modal.innerHTML = quizHTML;
+                    modal.style.display = 'flex';
+                    
+                    // Configurar eventos para las opciones
+                    document.querySelectorAll('.quiz-option').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const selectedAnswer = parseInt(this.getAttribute('data-answer'));
+                            const feedback = document.getElementById('quizFeedback');
+                            const feedbackContent = document.getElementById('feedbackContent');
+                            const nextButton = document.getElementById('nextQuestion');
+                            
+                            // Deshabilitar todos los botones
+                            document.querySelectorAll('.quiz-option').forEach(button => {
+                                button.disabled = true;
+                            });
+                            
+                            if (selectedAnswer === q.answer) {
+                                score++;
+                                feedbackContent.innerHTML = `
+                                    <div class="correct">
+                                        <strong>¡Correcto!</strong>
+                                        <div class="quiz-explanation">${q.explanation}</div>
+                                    </div>
+                                `;
+                            } else {
+                                feedbackContent.innerHTML = `
+                                    <div class="incorrect">
+                                        <strong>Incorrecto.</strong> La respuesta correcta es: "${q.options[q.answer]}"
+                                        <div class="quiz-explanation">${q.explanation}</div>
+                                    </div>
+                                `;
+                            }
+                            
+                            feedback.style.display = 'block';
+                            nextButton.style.display = 'block';
+                            
+                            // Configurar siguiente pregunta
+                            nextButton.addEventListener('click', function() {
+                                currentQuestion++;
+                                showQuestion();
+                            });
+                        });
+                    });
+                    
+                    // Configurar cerrar quiz
+                    document.getElementById('closeQuiz').addEventListener('click', function() {
+                        modal.style.display = 'none';
+                        currentQuestion = 0;
+                        score = 0;
+                    });
+                }
+                
+                function showResults() {
+                    const percentage = Math.round((score / questions.length) * 100);
+                    let message = '';
+                    
+                    if (percentage >= 80) {
+                        message = '¡Excelente! Dominas el tema de la meiosis.';
+                    } else if (percentage >= 60) {
+                        message = 'Buen trabajo, pero puedes mejorar. Sigue estudiando.';
+                    } else {
+                        message = 'Necesitas repasar más el tema de la meiosis.';
+                    }
+                    
+                    const modal = document.getElementById('infoModal');
+                    modal.innerHTML = `
+                        <div class="modal-content">
+                            <h2>Resultados del Quiz sobre Meiosis</h2>
+                            <p>Obtuviste ${score} de ${questions.length} respuestas correctas (${percentage}%).</p>
+                            <p>${message}</p>
+                            <button class="btn" id="restartQuiz">Reiniciar Quiz</button>
+                            <button class="btn btn-secondary" id="closeResults">Cerrar</button>
+                        </div>
+                    `;
+                    modal.style.display = 'flex';
+                    
+                    document.getElementById('restartQuiz').addEventListener('click', function() {
+                        currentQuestion = 0;
+                        score = 0;
+                        showQuestion();
+                    });
+                    
+                    document.getElementById('closeResults').addEventListener('click', function() {
+                        modal.style.display = 'none';
+                        currentQuestion = 0;
+                        score = 0;
+                    });
+                }
+                
+                showQuestion();
+            });
+        }
+        
+        // Inicialización cuando se carga la página
+        document.addEventListener('DOMContentLoaded', function() {
+            updateVisitorCounter();
+            setupPostToggles();
+            setupModal();
+            setupComments();
+            setupQuiz();
+            
+            // Configurar modo oscuro
+            document.getElementById('toggleDarkMode').addEventListener('click', toggleDarkMode);
+            
+            // Verificar si el modo oscuro estaba activado
+            if (localStorage.getItem('darkMode') === 'true') {
+                toggleDarkMode();
+            }
+            
+            // Configurar barra de progreso
+            window.onscroll = function() { updateProgressBar(); };
+        });
+    </script>
+</body>
+</html>
